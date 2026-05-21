@@ -13,6 +13,16 @@ pipeline {
             }
         }
 
+        stage('Deploy using Ansible') {
+    steps {
+        sh '''
+        ansible-playbook ansible/deploy.yml \
+        -i ansible/hosts \
+        --private-key /root/key.pem
+        '''
+    }
+}
+
         stage('Login to DockerHub') {
             steps {
                 withCredentials([usernamePassword(
