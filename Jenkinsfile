@@ -16,6 +16,7 @@ pipeline {
         stage('Deploy using Ansible') {
     steps {
         sh '''
+        ANSIBLE_HOST_KEY_CHECKING=False
         ansible-playbook ansible/deploy.yml \
         -i ansible/hosts \
         --private-key /root/key.pem
