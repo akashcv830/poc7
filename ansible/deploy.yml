@@ -1,0 +1,17 @@
+- name: Deploy Docker Container
+  hosts: web
+  become: yes
+
+  tasks:
+
+    - name: Pull Docker Image
+      shell: docker pull 472004/poc7-app
+
+    - name: Stop old container
+      shell: docker stop poc7 || true
+
+    - name: Remove old container
+      shell: docker rm poc7 || true
+
+    - name: Run new container
+      shell: docker run -d -p 8081:80 --name poc7 472004/poc7-app
