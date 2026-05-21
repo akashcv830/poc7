@@ -2,13 +2,6 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/akashcv830/poc7.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t poc7-app .'
