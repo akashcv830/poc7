@@ -5,14 +5,6 @@ pipeline {
         DOCKER_IMAGE = "472004/poc7-app"
     }
 
-    stages {
-
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/akashcv830/poc7.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKER_IMAGE .'
