@@ -1,22 +1,40 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "472004/poc7-app"
+    }
+
     stages {
-        stage('Build Docker Image') {
+
+        stage('Clone Code') {
             steps {
-                sh 'docker build -t poc7-app .'
+                git 'https://github.com/akashcv830/poc7.git'
             }
         }
 
-        stage('Run Container') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                docker stop poc7 || true
-                docker rm poc7 || true
-                docker run -d -p 8081:80 --name poc7 poc7-app
-                '''
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'poc7',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                sh 'docker push $DOCKER_IMAGE'
             }
         }
     }
 }
-
