@@ -1,10 +1,12 @@
-- hosts: local
-  become: false
+- hosts: localhost
+  connection: local
+  gather_facts: no
 
   tasks:
 
-    - name: Stop old container
-      shell: docker rm -f app || true
+    - name: Remove old container
+      command: docker rm -f app
+      ignore_errors: yes
 
-    - name: Run new container
-      shell: docker run -d -p 80:80 --name app <dockerhub-username>/poc7-app
+    - name: Run container
+      command: docker run -d -p 8081:80 --name app 472004/poc7-app
