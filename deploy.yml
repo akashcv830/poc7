@@ -1,1 +1,10 @@
+- hosts: local
+  become: false
 
+  tasks:
+
+    - name: Stop old container
+      shell: docker rm -f app || true
+
+    - name: Run new container
+      shell: docker run -d -p 80:80 --name app <dockerhub-username>/poc7-app
